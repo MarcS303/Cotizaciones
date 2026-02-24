@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizaciones Bursátiles</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📈 Cotizaciones Bursátiles</h1>
+            <p class="subtitle">Seguimiento en tiempo real de empresas</p>
+        </header>
+
+        <div class="search-box">
+            <div class="search-input-wrapper">
+                <input type="text" id="symbolInput" placeholder="Ej: BYD, AAPL, TSLA, MSFT..." value="BYDDF">
+                <button id="searchBtn">Buscar</button>
+            </div>
+            <div class="quick-stocks">
+                <span>Populares:</span>
+                <button class="quick-btn" data-symbol="BYDDF">BYD</button>
+                <button class="quick-btn" data-symbol="AAPL">Apple</button>
+                <button class="quick-btn" data-symbol="TSLA">Tesla</button>
+                <button class="quick-btn" data-symbol="MSFT">Microsoft</button>
+                <button class="quick-btn" data-symbol="GOOGL">Google</button>
+                <button class="quick-btn" data-symbol="AMZN">Amazon</button>
+            </div>
+        </div>
+
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Cargando datos...</p>
+        </div>
+
+        <div id="error" class="error hidden"></div>
+
+        <div id="stockInfo" class="stock-info hidden">
+            <div class="stock-header">
+                <div class="stock-title">
+                    <h2 id="companyName">-</h2>
+                    <span id="stockSymbol" class="symbol-badge">-</span>
+                </div>
+                <div class="stock-price">
+                    <span id="currentPrice" class="price">-</span>
+                    <span id="priceChange" class="change">-</span>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3>Histórico de precios</h3>
+                    <div class="time-range">
+                        <button class="range-btn active" data-range="1d">1D</button>
+                        <button class="range-btn" data-range="5d">5D</button>
+                        <button class="range-btn" data-range="1mo">1M</button>
+                        <button class="range-btn" data-range="3mo">3M</button>
+                        <button class="range-btn" data-range="6mo">6M</button>
+                        <button class="range-btn" data-range="1y">1A</button>
+                    </div>
+                </div>
+                <canvas id="stockChart"></canvas>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Apertura</span>
+                    <span id="openPrice" class="stat-value">-</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Máximo</span>
+                    <span id="highPrice" class="stat-value">-</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Mínimo</span>
+                    <span id="lowPrice" class="stat-value">-</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Volumen</span>
+                    <span id="volume" class="stat-value">-</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Cap. Mercado</span>
+                    <span id="marketCap" class="stat-value">-</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">52 Semanas</span>
+                    <span id="week52" class="stat-value">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
