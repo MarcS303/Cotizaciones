@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizaciones Bursátiles - Documentación</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00d4aa;
+            --primary-dark: #00b894;
+            --secondary: #6c5ce7;
+            --dark: #0a0a0f;
+            --dark-secondary: #12121a;
+            --dark-tertiary: #1a1a25;
+            --text: #e4e4e7;
+            --text-muted: #9ca3af;
+            --border: #27272a;
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--dark-secondary) 0%, var(--dark-tertiary) 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 4rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(0, 212, 170, 0.08) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        header .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--text) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .badges {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: var(--dark-tertiary);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge-primary {
+            background: rgba(0, 212, 170, 0.15);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--dark-secondary);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 0;
+            overflow-x: auto;
+        }
+
+        nav a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Sections */
+        section {
+            padding: 4rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        h2 .icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--primary);
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Code blocks */
+        pre {
+            background: var(--dark-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: var(--primary);
+        }
+
+        .bash {
+            color: var(--text);
+        }
+
+        /* Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: var(--dark-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--dark-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--dark-tertiary);
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        td {
+            color: var(--text-muted);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: var(--dark-tertiary);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--dark-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        /* File tree */
+        .file-tree {
+            background: var(--dark-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: monospace;
+            margin: 1.5rem 0;
+        }
+
+        .file-tree .folder {
+            color: var(--primary);
+        }
+
+        .file-tree .file {
+            color: var(--text-muted);
+        }
+
+        .file-tree .tab {
+            margin-left: 1.5rem;
+            display: block;
+        }
+
+        /* Alert */
+        .alert {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .alert-title {
+            color: var(--error);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert p {
+            color: var(--text);
+            margin: 0;
+        }
+
+        /* Features list */
+        .features {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .features li {
+            padding: 0.75rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: var(--text-muted);
+        }
+
+        .features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-secondary);
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        footer p {
+            margin-bottom: 1rem;
+        }
+
+        .github-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .github-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            header {
+                padding: 3rem 0;
+            }
+
+            section {
+                padding: 2rem 0;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">📈</div>
+            <h1>Cotizaciones Bursátiles</h1>
+            <p class="subtitle">Aplicación web para consultar y monitorear cotizaciones de acciones en tiempo real con gráficos interactivos y estadísticas financieras</p>
+            <div class="badges">
+                <span class="badge badge-primary">🚀 Node.js</span>
+                <span class="badge">📊 Chart.js</span>
+                <span class="badge">🌐 Yahoo Finance</span>
+                <span class="badge">💻 Vanilla JS</span>
+            </div>
+            <div class="btn-group" style="justify-content: center; margin-top: 2rem;">
+                <a href="https://github.com/MarcS303/Cotizaciones" class="btn btn-primary" target="_blank">
+                    📂 Ver en GitHub
+                </a>
+                <a href="../index.html" class="btn btn-secondary" target="_blank">
+                    🌐 Probar App
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#inicio" class="active">Inicio</a></li>
+                <li><a href="#caracteristicas">Características</a></li>
+                <li><a href="#instalacion">Instalación</a></li>
+                <li><a href="#uso">Uso</a></li>
+                <li><a href="#estructura">Estructura</a></li>
+                <li><a href="#configuracion">Configuración</a></li>
+                <li><a href="#despliegue">Despliegue</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="inicio">
+        <div class="container">
+            <h2><span class="icon">🎯</span> Acerca del Proyecto</h2>
+            <p><strong>Cotizaciones Bursátiles</strong> es una aplicación web desarrollada con tecnologías modernas que permite a los usuarios consultar información financiera de empresas que cotizan en bolsa en tiempo real.</p>
+            <p>La aplicación se conecta a la API de Yahoo Finance para obtener datos precisos y actualizados sobre precios de acciones, volúmenes de negociación, capitalización de mercado y otros indicadores financieros relevantes.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon">🔍</div>
+                    <h4>Búsqueda Inteligente</h4>
+                    <p>Busca cualquier acción por su símbolo bursátil (AAPL, TSLA, MSFT, GOOGL, etc.)</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📈</div>
+                    <h4>Gráficos Interactivos</h4>
+                    <p>Visualiza el historial de precios con intervalos configurables y diseño visual atractivo</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <h4>Datos en Tiempo Real</h4>
+                    <p>Precios actuales, cambio porcentual y estadísticas financieras actualizadas</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📱</div>
+                    <h4>Diseño Responsivo</h4>
+                    <p>Interfaz adaptativa que funciona perfectamente en móvil y escritorio</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="caracteristicas">
+        <div class="container">
+            <h2><span class="icon">✨</span> Características</h2>
+            <ul class="features">
+                <li><strong>Búsqueda de acciones:</strong> Busca cualquier acción por su símbolo bursátil (AAPL, TSLA, MSFT, etc.)</li>
+                <li><strong>Gráficos interactivos:</strong> Visualiza el historial de precios con intervalos configurables (1D, 5D, 1M, 3M, 6M, 1A)</li>
+                <li><strong>Datos en tiempo real:</strong> Precios actuales, cambio porcentual, apertura, máximo, mínimo</li>
+                <li><strong>Estadísticas financieras:</strong> Volumen de negociación, capitalización de mercado, rango de 52 semanas</li>
+                <li><strong>Diseño responsivo:</strong> Funciona en dispositivos móviles y escritorio</li>
+                <li><strong>Interfaz moderna:</strong> Diseño limpio con gradientes y animaciones suaves</li>
+                <li><strong>Acceso rápido:</strong> Botones predefinidos para las acciones más populares</li>
+                <li><strong>Feedback visual:</strong> Indicadores de carga y mensajes de error intuitivos</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="instalacion">
+        <div class="container">
+            <h2><span class="icon">🛠️</span> Instalación</h2>
+            <p>Sigue estos pasos para instalar y ejecutar el proyecto en tu máquina local:</p>
+            
+            <h3>1. Clonar el repositorio</h3>
+            <pre><code class="bash">git clone https://github.com/MarcS303/Cotizaciones.git
+cd Cotizaciones</code></pre>
+
+            <h3>2. Instalar dependencias</h3>
+            <pre><code class="bash">npm install</code></pre>
+
+            <h3>3. Iniciar los servicios</h3>
+            <p>Necesitas iniciar dos servicios: el servidor web y el proxy de la API:</p>
+            <pre><code class="bash"># Terminal 1 - Servidor web
+node server.js
+
+# Terminal 2 - Proxy API
+node api.js</code></pre>
+
+            <div class="alert">
+                <div class="alert-title">⚠️ Importante</div>
+                <p>Debes ejecutar ambos servicios simultáneamente para que la aplicación funcione correctamente. El servidor web corre en el puerto 3000 y el proxy API en el puerto 3001.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="uso">
+        <div class="container">
+            <h2><span class="icon">⚡</span> Cómo Usar</h2>
+            <p>Una vez que los servicios estén ejecutándose, sigue estos pasos:</p>
+            
+            <ol style="margin: 1.5rem 0; padding-left: 1.5rem; color: var(--text-muted);">
+                <li style="padding: 0.5rem 0;">Abre tu navegador web y navega a <code>http://localhost:3000</code></li>
+                <li style="padding: 0.5rem 0;">En el campo de búsqueda, ingresa el símbolo de la acción que deseas consultar (ej: AAPL, TSLA, MSFT)</li>
+                <li style="padding: 0.5rem 0;">Presiona Enter o haz clic en el botón "Buscar"</li>
+                <li style="padding: 0.5rem 0;">Explora los gráficos y estadísticas de la acción seleccionada</li>
+                <li style="padding: 0.5rem 0;">Usa los botones de intervalo de tiempo para cambiar el período del gráfico</li>
+            </ol>
+
+            <h3>Comandos Disponibles</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>node server.js</code></td>
+                        <td>Inicia el servidor web en el puerto 3000</td>
+                    </tr>
+                    <tr>
+                        <td><code>node api.js</code></td>
+                        <td>Inicia el proxy de la API en el puerto 3001</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Símbolos Populares</h3>
+            <p>La aplicación incluye botones de acceso rápido para las siguientes acciones:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Símbolo</th>
+                        <th>Empresa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>BYDDF</code></td>
+                        <td>BYD Company Ltd.</td>
+                    </tr>
+                    <tr>
+                        <td><code>AAPL</code></td>
+                        <td>Apple Inc.</td>
+                    </tr>
+                    <tr>
+                        <td><code>TSLA</code></td>
+                        <td>Tesla Inc.</td>
+                    </tr>
+                    <tr>
+                        <td><code>MSFT</code></td>
+                        <td>Microsoft Corporation</td>
+                    </tr>
+                    <tr>
+                        <td><code>GOOGL</code></td>
+                        <td>Alphabet Inc.</td>
+                    </tr>
+                    <tr>
+                        <td><code>AMZN</code></td>
+                        <td>Amazon.com Inc.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="estructura">
+        <div class="container">
+            <h2><span class="icon">📁</span> Estructura del Proyecto</h2>
+            <p>El proyecto está organizado de la siguiente manera:</p>
+            
+            <div class="file-tree">
+<span class="folder">Cotizaciones/</span>
+├── <span class="file">index.html</span>          <span style="color: #6a9955;">// Página principal de la aplicación</span>
+├── <span class="file">style.css</span>           <span style="color: #6a9955;">// Estilos CSS de la aplicación</span>
+├── <span class="file">app.js</span>              <span style="color: #6a9955;">// Lógica del frontend</span>
+├── <span class="file">api.js</span>              <span style="color: #6a9955;">// Proxy para Yahoo Finance</span>
+├── <span class="file">server.js</span>           <span style="color: #6a9955;">// Servidor Node.js</span>
+├── <span class="file">package.json</span>         <span style="color: #6a9955;">// Dependencias del proyecto</span>
+├── <span class="file">README.md</span>            <span style="color: #6a9955;">// Documentación del proyecto</span>
+└── <span class="folder">docs/</span>               <span style="color: #6a9955;">// Documentación (GitHub Pages)</span>
+            </div>
+
+            <h3>Descripción de Archivos</h3>
+            <div class="grid">
+                <div class="card">
+                    <h4>index.html</h4>
+                    <p>Página principal de la aplicación. Contiene la estructura HTML, campos de búsqueda, contenedores para gráficos y estadísticas.</p>
+                </div>
+                <div class="card">
+                    <h4>style.css</h4>
+                    <p>Estilos CSS con diseño moderno, gradientes, animaciones y diseño responsivo para móvil y escritorio.</p>
+                </div>
+                <div class="card">
+                    <h4>app.js</h4>
+                    <p>Lógica del frontend: gestión de eventos, llamadas a la API, renderizado de gráficos con Chart.js y formateo de datos.</p>
+                </div>
+                <div class="card">
+                    <h4>api.js</h4>
+                    <p>Servidor proxy que se conecta a Yahoo Finance para obtener datos de cotizaciones. Resuelve problemas de CORS.</p>
+                </div>
+                <div class="card">
+                    <h4>server.js</h4>
+                    <p>Servidor HTTP básico que sirve los archivos estáticos de la aplicación.</p>
+                </div>
+                <div class="card">
+                    <h4>docs/</h4>
+                    <p>Carpeta con la documentación para GitHub Pages. Contiene este archivo index.html de documentación.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="configuracion">
+        <div class="container">
+            <h2><span class="icon">🔧</span> Configuración</h2>
+            <p>Puedes personalizar varios aspectos de la aplicación:</p>
+
+            <h3>Cambiar Puerto del Servidor</h3>
+            <p>Edita el archivo <code>server.js</code>:</p>
+            <pre><code>server.listen(3000, () => { ... });
+// Cambia 3000 al puerto deseado</code></pre>
+
+            <h3>Cambiar Puerto de la API</h3>
+            <p>Edita el archivo <code>app.js</code>:</p>
+            <pre><code>const API_URL = 'http://localhost:3001/api';
+// Cambia al puerto configurado en api.js</code></pre>
+
+            <h3>Cambiar Acción por Defecto</h3>
+            <p>Edita el archivo <code>app.js</code>:</p>
+            <pre><code>let currentSymbol = 'BYDDF';
+// Cambia al símbolo que desees cargar inicialmente</code></pre>
+        </div>
+    </section>
+
+    <section id="despliegue">
+        <div class="container">
+            <h2><span class="icon">🌐</span> Despliegue</h2>
+            
+            <h3>GitHub Pages</h3>
+            <p>Este proyecto incluye documentación desplegable en GitHub Pages. La documentación está alojada en la carpeta <code>docs/</code> y se accede a través de:</p>
+            <pre><code>https://marcs303.github.io/Cotizaciones/</code></pre>
+
+            <h3>Producción</h3>
+            <p>Para desplegar en un entorno de producción, considera las siguientes opciones:</p>
+            <ul class="features">
+                <li><strong>Servidores web:</strong> Nginx o Apache como servidor reverse proxy</li>
+                <li><strong>Seguridad:</strong> Configurar HTTPS con Let's Encrypt</li>
+                <li><strong>Plataformas cloud:</strong> Vercel, Netlify, Heroku o Railway</li>
+                <li><strong>Contenedores:</strong> Docker para aislamiento y despliegue consistente</li>
+            </ul>
+
+            <h3>Desplegar en Vercel (Ejemplo)</h3>
+            <pre><code class="bash"># Instalar Vercel CLI
+npm i -g vercel
+
+# Desplegar
+vercel</code></pre>
+        </div>
+    </section>
+
+    <section id="tecnologias">
+        <div class="container">
+            <h2><span class="icon">🖥️</span> Tecnologías Utilizadas</h2>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon">🌐</div>
+                    <h4>HTML5</h4>
+                    <p>Lenguaje de marcado para la estructura de la página web</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🎨</div>
+                    <h4>CSS3</h4>
+                    <p>Estilos con variables CSS, flexbox, grid y animaciones</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⚙️</div>
+                    <h4>JavaScript Vanilla</h4>
+                    <p>Sin frameworks, código limpio y performant</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <h4>Chart.js</h4>
+                    <p>Biblioteca para gráficos interactivos y visualizaciones</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🖥️</div>
+                    <h4>Node.js</h4>
+                    <p>Entorno de ejecución para el servidor y proxy API</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📈</div>
+                    <h4>Yahoo Finance</h4>
+                    <p>API para obtener datos financieros en tiempo real</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="licencia">
+        <div class="container">
+            <h2><span class="icon">📄</span> Licencia</h2>
+            <p>Este proyecto está bajo la licencia MIT. Esto significa que puedes usar, copiar, modificar, fusionar, publicar, distribuir, sublicenciar y/o vender copias del software, con la condición de que se incluya el aviso de copyright.</p>
+            <p>El proyecto se proporciona "tal cual", sin garantía de ningún tipo, expresa o implícita.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>📈 <strong>Cotizaciones Bursátiles</strong></p>
+            <p>Desarrollado por <a href="https://github.com/MarcS303" class="github-link">MarcS303</a></p>
+            <p>
+                <a href="https://github.com/MarcS303/Cotizaciones" class="github-link">Ver en GitHub</a> • 
+                <a href="https://github.com/MarcS303/Cotizaciones/issues" class="github-link">Reportar problema</a>
+            </p>
+            <p style="margin-top: 2rem; font-size: 0.875rem; color: var(--text-muted);">
+                ⭐️ Si te gusta este proyecto, ¡considera darle una estrella en GitHub!
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                    document.querySelectorAll('nav a').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Update active nav on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
